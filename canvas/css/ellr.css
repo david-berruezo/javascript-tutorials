@@ -1,0 +1,36 @@
+@CHARSET "ISO-8859-1";
+
+html,body{
+	
+	margin:0px;
+	padding:0px;
+	overflow:hidden;
+	background-color: #000000;
+}
+
+#canvas{
+	
+	position:absolute;
+	left:0px;
+	/*top:0px;*/
+	margin:0px;
+	padding:0px;
+	cursor:pointer;
+	bottom:0px;
+	z-index: 1;	
+	
+}
+
+#canvas1{
+	
+	position:absolute;
+	left:0px;
+	/*top:0px;*/
+	margin:0px;
+	padding:0px;
+	cursor:pointer;
+	bottom:0px;
+	z-index: 1;	
+	
+}
+

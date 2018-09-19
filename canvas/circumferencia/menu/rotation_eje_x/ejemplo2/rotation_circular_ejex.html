@@ -1,0 +1,237 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Angle Bounce</title>
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="200" height="200" style="width:100%;height:100%;border:1px solid #cccccc;"></canvas>
+<img class="imagen" src="imagen.png">
+<script>
+    window.onload = function () {
+                var canvas       = document.getElementById('canvas'),
+                context          = canvas.getContext('2d'),
+                mouse            = captureMouse(canvas),
+                balls            = [],
+                cuadrados        = [],
+                numBalls         = 10,
+                separacionGrados = 360 / numBalls,
+                vr               = 0.0005,
+                centerX          = 200,
+                centerY          = 100,
+                puntoInicialX    = canvas.width  / 4,
+                puntoInicialY    = canvas.height / 2,
+                radio            = 50,
+                fl               = 100,
+                contadorVueltas  = 0,
+                contadorGrados   = 0,
+                scale            = 0,
+                estado           = 'activado'; //referenced by move and drawFrame
+
+
+        function resizeCanvas() {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            /**
+             * Your drawings need to be inside this function otherwise they will be reset when
+             * you resize the browser window and the canvas goes will be cleared.
+             */
+            //drawStuff();
+        }
+
+        resizeCanvas();
+
+        for (var ball, i = 0; i < numBalls; i++) {
+            ball        = new Ball();
+            ball.x      = centerX + radio * (Math.cos((i * separacionGrados)*Math.PI/180));
+            ball.y      = centerY + radio; //* (Math.sin(i * separacionGrados));
+            ball.zpos   = centerX + radio;
+            ball.radius = 10;
+            ball.setIndex(i);
+            ball.setGrade(i * separacionGrados);
+            balls.push(ball);
+            var cuadrado        = new MiCuadrado();
+            cuadrado.x      = centerX + radio  * (Math.cos((i * separacionGrados)*Math.PI/180));
+            cuadrado.y      = centerY + radio; //* (Math.sin(i * separacionGrados));
+            cuadrado.zpos   = centerX + radio;
+            //ball.radius = 10;
+            cuadrado.setIndex(i);
+            cuadrado.setGrade(i * separacionGrados);
+            cuadrados.push(cuadrado);
+            if (i!=0){
+                console.log('El width and height es: '+cuadrados[i-1].width+' el height es: '+cuadrados[i-1].height);
+            }
+
+        }
+        canvas.addEventListener('mousedown', function (event) {
+            event.preventDefault();
+            cuadrados.forEach(checkMouseMenu);
+        }, false);
+
+        canvas.addEventListener('mouseup', function (event) {
+            event.preventDefault();
+            cuadrados.forEach(checkMouseMenu);
+        }, false);
+
+        canvas.addEventListener('mousemove', function (event) {
+            event.preventDefault();
+            cuadrados.forEach(checkMouseMenu);
+        }, false);
+
+        /*
+         * Rotamos en el eje X
+         */
+        function rotateX (ball) {
+
+            var x2 = radio * Math.cos(ball.grade*Math.PI/180) - radio * Math.sin(ball.grade*Math.PI/180);
+            var y2 = radio * Math.sin(ball.grade*Math.PI/180) + radio * Math.cos(ball.grade*Math.PI/180);
+
+            ball.x    = centerX + x2;
+            ball.y    = y2;
+
+        }
+
+        /*
+         * Rotamos en el eje Y
+         */
+        /*
+        function rotateY (ball) {
+            var x2 = radio * Math.cos(ball.grade*Math.PI/180) - radio * Math.sin(ball.grade*Math.PI/180);
+            var y2 = radio * Math.sin(ball.grade*Math.PI/180) + radio * Math.cos(ball.grade*Math.PI/180);
+            ball.x    =  centerX + x2;
+            ball.y    =  centerY + y2;
+        }
+        */
+
+        /*
+         * Rotamos en el eje Y
+         */
+        function rotateY (ball) {
+            var x2 = radio * Math.cos(ball.grade*Math.PI/180) - radio * Math.sin(ball.grade*Math.PI/180);
+            var z2 = radio * Math.sin(ball.grade*Math.PI/180) + radio * Math.cos(ball.grade*Math.PI/180);
+            ball.x    =  centerX + x2;
+            ball.zpos = z2;
+
+        }
+
+        function rotateY2 (cuadrado) {
+            var x2 = radio * Math.cos(cuadrado.grade*Math.PI/180) - radio * Math.sin(cuadrado.grade*Math.PI/180);
+            var z2 = radio * Math.sin(cuadrado.grade*Math.PI/180) + radio * Math.cos(cuadrado.grade*Math.PI/180);
+            cuadrado.x    =  centerX + x2;
+            cuadrado.zpos = 200 + z2;
+
+        }
+
+        function zSort (a, b) {
+
+            return (b.zpos - a.zpos);
+        }
+
+        function zSort1 (a, b) {
+
+            return (b.zpos - a.zpos);
+        }
+
+        function move (ball) {
+            if (contadorVueltas < 10){
+                //rotateX(ball);
+                rotateY(ball);
+                setPerspective(ball);
+                //ball.x = ball.x*(scale/250);
+                //ball.y = ball.y*(scale/250);
+                if (ball.grade<360-1){
+                    ball.grade++;
+                }else{
+                    ball.grade = 0;
+                }
+            }
+        }
+
+        function move1 (cuadrado) {
+            //if (contadorVueltas < 10){
+                //rotateX(ball);
+                rotateY2(cuadrado);
+                setPerspective2(cuadrado);
+                if (cuadrado.grade<360-1){
+                    cuadrado.grade++;
+                }else{
+                    cuadrado.grade = 0;
+                }
+            //}
+        }
+
+        function setPerspective (ball) {
+            if (ball.zpos > -fl) {
+                var scale = fl / (fl + ball.zpos);
+                ball.scaleX = ball.scaleY = scale;
+                //context.globalAlpha = scale-.2;
+                ball.visible = true;
+            } else {
+                //ball.visible = false;
+            }
+        }
+
+        function setPerspective2 (cuadrado) {
+            if (cuadrado.zpos > -fl) {
+                var scale1 = fl / (fl + cuadrado.zpos);
+                cuadrado.scaleX = cuadrado.scaleY = scale1;
+                //context.globalAlpha = scale-.2;
+                cuadrado.visible = true;
+            } else {
+                //cuadrado.visible = false;
+            }
+            //ball.x = ball.xpos;
+            //ball.y = ball.ypos;
+        }
+
+
+        function draw (ball) {
+            ball.draw(context);
+        }
+
+        function draw1 (cuadrado) {
+            cuadrado.draw(context);
+            console.log('Mouse x vale:'+mouse.x+' Cuadrado x vale:'+cuadrado.x+'y Mouse.y vale: '+mouse.y+' vale:'+cuadrado.y);
+        }
+
+        function checkMouseMenu(cuadrado){
+
+            if (utils.containsPoint(cuadrado.getBounds(), mouse.x, mouse.y)) {
+                console.log('Encontrado '+cuadrado.index);
+            }
+        }
+
+        function drawFrame () {
+            window.requestAnimationFrame(drawFrame, canvas);
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            /*
+            balls.forEach(move);
+            balls.sort(zSort);
+            balls.forEach(draw);
+            */
+
+            cuadrados.forEach(move1);
+            cuadrados.sort(zSort1);
+            cuadrados.forEach(draw1);
+            //cuadrados.forEach(capturarMouse);
+            cuadrados.forEach(checkMouseMenu);
+
+            if (contadorGrados<360-1){
+                contadorGrados++;
+            }else{
+                contadorGrados = 0;
+                contadorVueltas++;
+            }
+            //console.log('Mouse x vale:'+mouse.x+'e y vale:'+mouse.y);
+
+        }
+        drawFrame();
+    }
+</script>
+</body>
+</html>
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RotarZ Alpha</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <style>
+        svg  {
+            display: block;
+            margin: 0 auto;
+        }
+
+        circle {
+            fill: #ccc;
+            stroke: #000;
+            stroke-width: 2px;
+        }
+    </style>
+</head>
+<body>
+<svg width="1000" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <circle /><circle /><circle /><circle /><circle /><circle /><circle /><circle /><circle /><circle /><circle /><circle /><circle />
+</svg>
+<script>
+    var origin_x = 500, // Ellipse origin x
+        origin_y = 125,   // Ellipse origin y
+        radius_x = 400,   // Ellipse radius x
+        radius_y = 45,    // Ellipse rodius y
+        circle_r = 40,    // Circle median rodius
+        shift_r = 12,     // Circle radius shift
+        circle_o = 50,    // Circle median opacity
+        shift_o = 40,     // Circle opacity shift
+        circle_c = 0,     // Circle count
+        circles = [];
+
+    function rotate() {
+        $.each(circles, function(index, value) {
+
+            var position = value.position < 359 ? value.position + 1 : 0,
+                props = getCircleProps(position),
+                circle = $(value.circle);
+
+            $(circle).attr('cx', props.x + origin_x)
+                .attr('cy', props.y + origin_y)
+                .attr('r', props.r)
+                .css({opacity: props.o});
+
+            circles[index].position = position;
+
+        });
+    }
+
+    function getCircleProps(degrees) {
+        var degrees_rad = Math.radians(degrees),
+            x = radius_x * Math.cos(degrees_rad),
+            y = radius_y * Math.sin(degrees_rad),
+            r = circle_r + ((y / radius_y) * shift_r),
+            o = (circle_o + ((y / radius_y) * shift_o)) / 100;
+        return {
+            x: x,
+            y: y,
+            r: r,
+            o: o
+        };
+    }
+
+    Math.radians = function(degrees) {
+        return degrees * Math.PI / 180;
+    };
+
+    $(function() {
+        var target = $('svg'),
+            items = target.children();
+        circle_c = target.children().length;
+
+        for (var i = 0; i < circle_c; i++) {
+
+            var origin = Math.floor((360 / circle_c) * i),
+                props = getCircleProps(origin),
+                circle = items[i];
+
+            $(circle).attr('cx', props.x + origin_x)
+                .attr('cy', props.y + origin_y)
+                .attr('r', props.r)
+                .css('opacity', props.o);
+
+            circles.push({
+                circle: circle,
+                position: origin
+            });
+        }
+        setInterval(rotate, 1000/60);
+    });
+</script>
+</body>
+</html>

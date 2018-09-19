@@ -1,0 +1,23 @@
+@CHARSET "ISO-8859-1";
+
+#capa1{
+	
+	position:absolute;
+	width:200px;
+	height:400px;
+	top:0px;
+	left:0px;
+	background-color: #cccccc;
+	
+}
+
+#capa2{
+	
+	position:relative;
+	width:200px;
+	height:400px;
+	top:400px;
+	left:0px;
+	background-color: #333333;
+	
+}

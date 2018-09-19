@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-family: 'Open Sans';
+        }
+
+        body {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background: #fff;
+        }
+
+        #flowchart {
+            display: block;
+            margin: 100px auto;
+            background: #eee;
+            stroke: none;
+            fill: #222;
+        }
+    </style>
+</head>
+<body>
+<svg id="flowchart" width="620" height="220" viewBox="0 0 620 220" style="background: #ddd">
+    <path id="blobs" d=""></path>
+</svg>
+<script>
+    var flowchart = document.getElementById('flowchart'),
+        blobs = document.getElementById('blobs'),
+        guides = document.getElementById('guides'),
+        animating = false,
+        b1 = {x: 310, y:110, r:60},
+        b2 = {x: 310, y:110, r:40};
+
+    function blob() {
+        var sR = 60,
+            // ox, oy = offset x and y from b1 to b2
+            ox = b2.x - b1.x,
+            oy = b2.y - b1.y,
+            // a, b, c = sides of triangle formed by b1, b2, and tangent 'sticky' blob
+            a = sR + b1.r,
+            b = sR + b2.r,
+            c = Math.sqrt(ox * ox + oy * oy),
+            merge = a*a >= b*b+c*c ? 0 : 1,
+            // t0 = angle of c (b1 to b2)
+            // t1 = angle of a from t0
+            // t2 = angle of b from t0
+            t0 = Math.atan2(oy, ox),
+            t1 = Math.acos((a*a + c*c - b*b)/(2*a*c)),
+            t2 = merge ? Math.PI - Math.asin(a*Math.sin(t1)/b) : Math.asin(a*Math.sin(t1)/b),
+            ax1 = Math.cos(t0+t1) * b1.r,
+            ay1 = Math.sin(t0+t1) * b1.r,
+            ax2 = Math.cos(t0-t1) * b1.r,
+            ay2 = Math.sin(t0-t1) * b1.r,
+            bx1 = Math.cos(t0+t2) * b2.r,
+            by1 = Math.sin(t0+t2) * b2.r,
+            bx2 = Math.cos(t0-t2) * b2.r,
+            by2 = Math.sin(t0-t2) * b2.r;
+            // console.log(t1);
+            // console.log("offset: ",ox,oy, ", triangle: ",a,b,c, " – ", t0,t1,t2);
+            // console.log("pointA1: ",ax1,ay1, "pointA2: ", ax2,ay2, "pointB1: ", bx1,by1, "pointB2: ", bx2,by2);
+       if (c <= b1.r-b2.r) {
+            blobs.setAttribute('d',
+                'M' + (b1.x-b1.r) + ',' + b1.y +
+                'A' + b1.r + ',' + b1.r + ' 0 1 1 ' + (b1.x+b1.r) + ',' + b1.y +
+                'A' + b1.r + ',' + b1.r + ' 0 1 1 ' + (b1.x-b1.r) + ',' + b1.y
+            );
+        } else if (isNaN(t1) || Math.sin(t1)*a < sR) {
+            blobs.setAttribute('d',
+                'M' + (b1.x-b1.r) + ',' + b1.y +
+                'A' + b1.r + ',' + b1.r + ' 0 1 1 ' + (b1.x+b1.r) + ',' + b1.y +
+                'A' + b1.r + ',' + b1.r + ' 0 1 1 ' + (b1.x-b1.r) + ',' + b1.y +
+                'M' + (b2.x-b2.r) + ',' + b2.y +
+                'A' + b2.r + ',' + b2.r + ' 0 1 1 ' + (b2.x+b2.r) + ',' + b2.y +
+                'A' + b2.r + ',' + b2.r + ' 0 1 1 ' + (b2.x-b2.r) + ',' + b2.y
+            );
+        } else {
+            blobs.setAttribute('d',
+                'M' + (b1.x+ax1) + ',' + (b1.y+ay1) +
+                'A' + b1.r + ',' + b1.r + ' 0 1 1 ' + (b1.x+ax2) + ',' + (b1.y+ay2) +
+                'A' + sR + ',' + sR + ' 0 0 0 ' + (b2.x+bx2) + ',' + (b2.y+by2) +
+                'A' + b2.r + ',' + b2.r + ' 0 '+merge+' 1 ' + (b2.x+bx1) + ',' + (b2.y+by1) +
+                'A' + sR + ',' + sR + ' 0 0 0 ' + (b1.x+ax1) + ',' + (b1.y+ay1)
+            );
+        }
+    }
+
+
+    window.requestAnimationFrame(blob);
+
+    window.addEventListener("click", toggleAnimation);
+
+    function toggleAnimation(e) {
+        if (animating) {
+            window.removeEventListener("mousemove", updateMousePos);
+            animating = false;
+        } else {
+            updateMousePos(e);
+            window.addEventListener("mousemove", updateMousePos);
+            animating = true;
+        }
+    }
+
+    function updateMousePos(e) {
+        b2.x = e.clientX - flowchart.getBoundingClientRect().left;
+        b2.y = e.clientY - flowchart.getBoundingClientRect().top;
+        window.requestAnimationFrame(blob);
+    }
+</script>
+</body>
+</html>

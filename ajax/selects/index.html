@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<select class="selector">
+    <option>uno</option>
+    <option>dos</option>
+    <option>tres</option>
+</select>
+<script>
+    $(document).ready(function(){
+        $(".selector").empty();
+        $(".selector").append('<option value="4">Cuatro</option>');
+        $(".selector").append('<option value="5">Cinco</option>');
+    });
+</script>
+</body>
+</html>

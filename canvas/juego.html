@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Juego</title>
+<script src="AnimationClass.js"></script>
+<script src="ControllerClass.js"></script>
+<script src="ModelClass.js"></script>
+<script src="ViewClass.js"></script>
+<script src="Level.js"></script>
+<script src="Actor.js"></script>
+<script src="HealthBar.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js" language="javascript"></script>	
+<script src="Librerias/jquery.js"></script>
+<script src="Librerias/utils/utils.js" language="javascript"></script>
+<link rel="stylesheet" type="text/css" href="css/estructura.css">
+<body>
+<canvas id="canvas" width="100%" height="100%" style="border:1px solid #cccccc; width:100%; height:100%;"></canvas>
+<script>
+
+window.onload = function(){
+	
+	var canvas = document.getElementById('canvas');
+	new Controller("canvas");
+
+};
+</script>
+</body>
+</html>

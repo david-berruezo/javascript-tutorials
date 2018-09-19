@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Script-based animation using requestAnimationFrame</title>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/easing/EasePack.min.js"></script>
+<script src="menu.js"></script>
+<style type="text/css">
+    html,body{
+        margin:0px;
+        padding:0px;
+        width:100%;
+        height:100%;
+    }
+    #contenedor {
+        position: absolute;
+        left:0px;
+        top:0px;
+        padding:0px;
+        margin:0px;
+        width:100%;
+    }
+    .cuadro{
+        position:absolute;
+        float:left;
+        margin:0px;
+        padding:0px;
+        width:10px;
+        height:40px;
+        background-color:#000000;
+        left:0px;
+        top:0px;
+    }
+</style>
+<body>
+<div id="contenedor"></div>
+</body>
+</html>

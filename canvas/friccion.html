@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Friction 1</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="canvas" width="400" height="400"></canvas>
+<script src="Librerias/utils/utils.js"></script>
+
+<script>
+window.onload = function () {
+var canvas = document.getElementById('canvas'),
+context = canvas.getContext('2d'),
+ball = new Ball(),
+vx = 0,
+vy = 5,
+friction = 0.1;
+ball.x = 150;
+ball.y = 150;
+	
+	(function drawFrame () {
+		
+		window.requestAnimationFrame(drawFrame, canvas);
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		var speed = Math.sqrt(vx * vx + vy * vy),
+		
+		angle = Math.atan2(vy, vx);
+		
+		angle++;
+		
+		console.log('angle: '+angle);
+		
+		if (speed > friction) {
+			
+			speed -= friction;
+		
+		} else {
+			
+			speed = 0;
+			
+			console.log('ball.x: '+ball.x+' ball.y: '+ball.y);
+		}
+		
+		vx = Math.cos(angle) * speed;
+		vy = Math.sin(angle) * speed;
+		
+		ball.x += vx;
+		ball.y += vy;
+		ball.draw(context);
+		
+		
+	}());
+};
+</script>
+</body>
+</html>

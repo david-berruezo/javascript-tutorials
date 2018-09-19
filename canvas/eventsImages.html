@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Estructura de un circumferencia canvas</title>
+<script src="Librerias/jquery.js"></script>
+<script src="librerias/utils/utils.js"></script>
+<script src="Events.js"></script>
+<script src="AnimationClass.js"></script>
+<link rel="stylesheet" type="text/css" href="css/events.css">
+</head>
+<body>
+<canvas id="canvas" width="600" height="600" style="border:1px solid #cccccc; width:600px; height:600px"></canvas>
+<script>
+
+var vectorProyectos   = new Array();
+var vectorObjetoFotos = new Array();
+
+function writeMessage(context, message){
+	
+	context.font = "18pt Calibri";
+	context.fillStyle = "black";
+	context.fillText(message, 10, 25);
+
+}
+
+function leerProyectos(){
+	
+	//console.log('El total del vector proyectos es: '+vectorProyectos.length);
+	
+	for (var i=0;i<vectorProyectos.length;i++){
+		
+		for (var key in vectorProyectos[i].imagenesCabecera){
+			
+			console.log('salida: '+vectorProyectos[i].imagenesCabecera[key]);
+			
+		}
+		
+	}
+	
+	
+}// End function
+
+/*
+* loads the images and then calls the callback function
+* with a hash of image objects when the images have loaded
+*/
+function loadImages(sources, callback){
+	
+	var loadedImages = 0;
+	var numImages 	 = 0;
+	var images 	     = {};
+	
+	// get num of sources
+	/*
+	for (var src in sources) {
+		numImages++;
+		
+	}
+	*/
+	
+	numImages = vectorProyectos.length;
+	
+	console.log('num images: '+vectorProyectos.length);
+	
+	for (var key in vectorProyectos[0].imagenesCabecera){
+		
+		if (vectorProyectos[0].imagenesCabecera[key] != ''){
+				
+			var url = vectorProyectos[0].imagenesCabecera[key];
+			var img = new Image();
+			img.src = vectorProyectos[0].imagenesCabecera[key];
+			img.width = 80;
+			img.height = 40;
+			
+			vectorObjetoFotos.push(img);
+			
+			img.onload = function(){
+				
+				if (++loadedImages >= 8) {
+					callback(vectorObjetoFotos);
+				}
+				
+				
+			}// End function	
+			
+			//images[src].src = vectorProyectos[0].imagenesCabecera[key];
+			
+			/*
+			images[src].onload = function(){
+				// call callback function() when images
+				// have loaded
+				
+					if (++loadedImages >= numImages) {
+						callback(images);
+					}
+				
+			}
+				
+			images[src].src = sources[src];
+			*/
+			
+			
+			
+			
+		}
+	
+	}	
+		
+	/*
+	// load images
+	for (var src in sources) {
+		
+		images[src] = new Image();
+		images[src].width  = 100;
+		images[src].height = 40;
+		images[src].onload = function(){
+		// call callback function() when images
+		// have loaded
+		
+			if (++loadedImages >= numImages) {
+				callback(images);
+			}
+		
+		}
+		
+		images[src].src = sources[src];
+	}
+	*/
+	
+	
+	
+}
+
+function drawImages(images){
+	
+	var events  = new Events("canvas");
+	var canvas  = events.getCanvas();
+	var context = events.getContext();
+	var message = "";
+	var margenX = 0;
+	
+	events.setStage(function(){
+		
+		this.clear();
+
+		for (var i=0; i< vectorObjetoFotos.length; i++){
+			
+			this.beginRegion();
+			
+			context.drawImage(vectorObjetoFotos[i], margenX + i * 50 + 10 * i, 70, 50,20);
+			
+			//context.drawImage(images.challengerImg, 50, 70, 100,40);
+			
+			// draw rectangular region for image
+			context.beginPath();
+			context.rect(margenX + i * 50 + 10 * i, 70, 50, 20);
+			context.closePath();
+			
+			this.addRegionEventListener("mouseover", function(){
+				message = "mouseover"+i;
+			});
+			
+			this.addRegionEventListener("mouseout", function(){
+				//message = "mouseout"+i;
+			});
+			
+			this.addRegionEventListener("mousedown", function(){
+				message = "mousedown"+i;
+			});
+			
+			this.addRegionEventListener("mouseup", function(){
+				message = "mouseup"+i;
+			});
+			
+			this.closeRegion();
+			
+		}
+		
+		/*
+		this.beginRegion();
+		
+		context.drawImage(vectorObjetoFotos[0], 50, 70, 100,40);
+		
+		//context.drawImage(images.challengerImg, 50, 70, 100,40);
+		
+		// draw rectangular region for image
+		context.beginPath();
+		context.rect(50, 70, 100, 40);
+		context.closePath();
+		
+		this.addRegionEventListener("mouseover", function(){
+			message = "Dodge Challenger mouseover!";
+		});
+		
+		this.addRegionEventListener("mouseout", function(){
+			message = "Dodge Challenger mouseout!";
+		});
+		
+		this.addRegionEventListener("mousedown", function(){
+			message = "Dodge Challenger mousedown!";
+		});
+		
+		this.addRegionEventListener("mouseup", function(){
+			message = "Dodge Challenger mouseup!";
+		});
+		
+		this.closeRegion();
+		*/
+		
+		/*
+		this.beginRegion();
+		
+		context.drawImage(images.cobraImg, 350, 50, 100, 40);
+		
+		// draw rectangular region for image
+		context.beginPath();
+		context.rect(350, 50, 100, 40);
+		context.closePath();
+		
+		this.addRegionEventListener("mouseover", function(){
+			message = "AC Cobra mouseover!";
+		});
+		
+		this.addRegionEventListener("mouseout", function(){
+			message = "AC Cobra mouseout!";
+		});
+		
+		this.addRegionEventListener("mousedown", function(){
+			message = "AC Cobra mousedown!";
+		});
+		
+		this.addRegionEventListener("mouseup", function(){
+			message = "AC Cobra mouseup!";
+		});
+		
+		this.closeRegion();
+		*/
+		
+		writeMessage(context, message);
+	
+	})
+	
+}	
+	
+window.onload = function(){
+	
+	llenarObjetoProyectos();
+	leerProyectos();
+	
+	var sources = {
+		challengerImg: "listado1.jpg",
+		cobraImg: "listado2.jpg"
+	};
+	
+	//loadImages(sources, drawImages);
+	loadImages(vectorProyectos, drawImages);
+	
+}
+
+//Llenamos objeto Proyectos con imagenes y detalle de nuestro proyecto
+function llenarObjetoProyectos(){
+	
+	var miProyecto = '';
+	
+	//Berruezo,Ellr Motorport,Electro Mecánico Comercial Salas 2014','Electro Mecánico Comercial Salas 2015','Cucas Luxyry Properties','eCommerce Barcelona 360','2Automoción','Hostal París','Your Spanish Wine'
+	
+	// Ellr Motorsport
+	/*
+	miProyecto = new objetoProyecto(0,'Ellr Motorsport','http://www.ellrmotorsport.net');
+	
+	miProyecto.imagenesListado[0]= 'http://www.ecommercebarcelona360.com/imagenesListado/ellrmotorsport/1.jpg';
+	miProyecto.imagenesListado[1]= 'http://www.ecommercebarcelona360.com/imagenesListado/ellrmotorsport/2.jpg';
+	miProyecto.imagenesListado[2]= 'http://www.ecommercebarcelona360.com/imagenesListado/ellrmotorsport/3.jpg';
+	miProyecto.imagenesListado[3]= 'http://www.ecommercebarcelona360.com/imagenesListado/ellrmotorsport/4.jpg';
+	miProyecto.imagenesListado[4]= 'http://www.ecommercebarcelona360.com/imagenesListado/ellrmotorsport/5.jpg';
+	miProyecto.imagenesListado[5]= 'http://www.ecommercebarcelona360.com/imagenesListado/ellrmotorsport/6.jpg';
+	
+	miProyecto.imagenesCabecera[0]= 'http://www.ecommercebarcelona360.com/imagenesCabecera/ellrmotorsport/1.jpg';
+	miProyecto.imagenesCabecera[1]= 'http://www.ecommercebarcelona360.com/imagenesCabecera/ellrmotorsport/2.jpg';
+	miProyecto.imagenesCabecera[2]= 'http://www.ecommercebarcelona360.com/imagenesCabecera/ellrmotorsport/3.jpg';
+	miProyecto.imagenesCabecera[3]= 'http://www.ecommercebarcelona360.com/imagenesCabecera/ellrmotorsport/4.jpg';
+	miProyecto.imagenesCabecera[4]= 'http://www.ecommercebarcelona360.com/imagenesCabecera/ellrmotorsport/5.jpg';
+	miProyecto.imagenesCabecera[5]= 'http://www.ecommercebarcelona360.com/imagenesCabecera/ellrmotorsport/6.jpg';
+	miProyecto.imagenesCabecera[6]= 'http://www.ecommercebarcelona360.com/imagenesCabecera/ellrmotorsport/7.jpg';
+	miProyecto.imagenesCabecera[7]= 'http://www.ecommercebarcelona360.com/imagenesCabecera/ellrmotorsport/8.jpg';
+	
+	
+	vectorProyectos.push(miProyecto);
+	*/
+	
+	// eCommerce
+	miProyecto = new objetoProyecto(1,'eCommerce Barcelona 360','http://www.ecommercebarcelona360.com');
+	miProyecto.imagenesListado[0]= 'http://localhost/javascript/ecommerce/img/ecommerce/imagenesListado/1.jpg';
+	miProyecto.imagenesListado[1]= 'http://localhost/javascript/ecommerce/img/ecommerce/imagenesListado/2.jpg';
+	miProyecto.imagenesListado[2]= 'http://localhost/javascript/ecommerce/img/ecommerce/imagenesListado/3.jpg';
+	miProyecto.imagenesListado[3]= 'http://localhost/javascript/ecommerce/img/ecommerce/imagenesListado/4.jpg';
+	miProyecto.imagenesListado[4]= 'http://localhost/javascript/ecommerce/img/ecommerce/imagenesListado/5.jpg';
+	miProyecto.imagenesListado[5]= 'http://localhost/javascript/ecommerce/img/ecommerce/imagenesListado/6.jpg';
+	
+		
+	miProyecto.imagenesCabecera[0]= 'http://localhost/javascript/ecommerce/img/ecommerce/cabecera/listado1.jpg';
+	miProyecto.imagenesCabecera[1]= 'http://localhost/javascript/ecommerce/img/ecommerce/cabecera/listado2.jpg';
+	miProyecto.imagenesCabecera[2]= 'http://localhost/javascript/ecommerce/img/ecommerce/cabecera/listado3.jpg';
+	miProyecto.imagenesCabecera[3]= 'http://localhost/javascript/ecommerce/img/ecommerce/cabecera/listado4.jpg';
+	miProyecto.imagenesCabecera[4]= 'http://localhost/javascript/ecommerce/img/ecommerce/cabecera/listado5.jpg';
+	miProyecto.imagenesCabecera[5]= 'http://localhost/javascript/ecommerce/img/ecommerce/cabecera/listado6.jpg';
+	miProyecto.imagenesCabecera[6]= 'http://localhost/javascript/ecommerce/img/ecommerce/cabecera/listado7.jpg';
+	miProyecto.imagenesCabecera[7]= 'http://localhost/javascript/ecommerce/img/ecommerce/cabecera/listado8.jpg';
+	
+	
+	vectorProyectos.push(miProyecto);
+	
+	
+	/*
+	// Cucas
+	miProyecto = new objetoProyecto(2,'Cucas Luxry Properties','http://www.cucasluxuryproperties.net');
+	miProyecto.imagenesListado[0]= 'http://www.ecommercebarcelona360.com/imagenesListado/cucas/1.jpg';
+	miProyecto.imagenesListado[1]= 'http://www.ecommercebarcelona360.com/imagenesListado/cucas/2.jpg';
+	miProyecto.imagenesListado[2]= 'http://www.ecommercebarcelona360.com/imagenesListado/cucas/3.jpg';
+	miProyecto.imagenesListado[3]= 'http://www.ecommercebarcelona360.com/imagenesListado/cucas/4.jpg';
+	miProyecto.imagenesListado[4]= 'http://www.ecommercebarcelona360.com/imagenesListado/cucas/5.jpg';
+	miProyecto.imagenesListado[5]= 'http://www.ecommercebarcelona360.com/imagenesListado/cucas/6.jpg';
+	
+	vectorProyectos.push(miProyecto);
+	
+	// Cemsalas 2014
+	miProyecto = new objetoProyecto(3,'Comercial electrom&eacute;canica Salas','http://www.cemsalas2014.net');
+	miProyecto.imagenesListado[0]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2014/1.jpg';
+	miProyecto.imagenesListado[1]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2014/2.jpg';
+	miProyecto.imagenesListado[2]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2014/3.jpg';
+	miProyecto.imagenesListado[3]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2014/4.jpg';
+	miProyecto.imagenesListado[4]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2014/5.jpg';
+	miProyecto.imagenesListado[5]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2014/6.jpg';
+	
+	vectorProyectos.push(miProyecto);
+
+	// Cemsalas 2015
+	miProyecto = new objetoProyecto(4,'Comercial electrom&eacute;canica Salas','http://www.cemsalas2015.net');
+	miProyecto.imagenesListado[0]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2015/1.jpg';
+	miProyecto.imagenesListado[1]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2015/2.jpg';
+	miProyecto.imagenesListado[2]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2015/3.jpg';
+	miProyecto.imagenesListado[3]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2015/4.jpg';
+	miProyecto.imagenesListado[4]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2015/5.jpg';
+	miProyecto.imagenesListado[5]= 'http://www.ecommercebarcelona360.com/imagenesListado/cemsalas2015/6.jpg';
+	
+	vectorProyectos.push(miProyecto);
+	
+	
+	// Berruezo
+	miProyecto = new objetoProyecto(5,'Berruezo','http://www.berruezomoda.com');
+	miProyecto.imagenesListado[0]= 'http://www.ecommercebarcelona360.com/imagenesListado/berruezo/1.jpg';
+	miProyecto.imagenesListado[1]= 'http://www.ecommercebarcelona360.com/imagenesListado/berruezo/2.jpg';
+	miProyecto.imagenesListado[2]= 'http://www.ecommercebarcelona360.com/imagenesListado/berruezo/3.jpg';
+	miProyecto.imagenesListado[3]= 'http://www.ecommercebarcelona360.com/imagenesListado/berruezo/4.jpg';
+	miProyecto.imagenesListado[4]= 'http://www.ecommercebarcelona360.com/imagenesListado/berruezo/5.jpg';
+	miProyecto.imagenesListado[5]= 'http://www.ecommercebarcelona360.com/imagenesListado/berruezo/6.jpg';
+	
+	vectorProyectos.push(miProyecto);
+	*/
+	
+	/*
+	// Dosa
+	miProyecto = new objetoProyecto(6,'2Automoci&oacute;n','http://www.2automocion.com');
+	miProyecto.imagenesListado[0]= 'http://www.ecommercebarcelona360.com/imagenesListado/dosa/1.jpg';
+	miProyecto.imagenesListado[1]= 'http://www.ecommercebarcelona360.com/imagenesListado/dosa/2.jpg';
+	miProyecto.imagenesListado[2]= 'http://www.ecommercebarcelona360.com/imagenesListado/dosa/3.jpg';
+	miProyecto.imagenesListado[3]= 'http://www.ecommercebarcelona360.com/imagenesListado/dosa/4.jpg';
+	miProyecto.imagenesListado[4]= 'http://www.ecommercebarcelona360.com/imagenesListado/dosa/5.jpg';
+	miProyecto.imagenesListado[5]= 'http://www.ecommercebarcelona360.com/imagenesListado/dosa/6.jpg';
+	
+	vectorProyectos.push(miProyecto);
+		
+	
+	// Hostal Paris
+	miProyecto = new objetoProyecto(7,'Hostal Paris Bcn','http://www.hostalparisbcn.com');
+	miProyecto.imagenesListado[0]= 'http://www.ecommercebarcelona360.com/imagenesListado/hostalparisbcn/1.jpg';
+	miProyecto.imagenesListado[1]= 'http://www.ecommercebarcelona360.com/imagenesListado/hostalparisbcn/2.jpg';
+	miProyecto.imagenesListado[2]= 'http://www.ecommercebarcelona360.com/imagenesListado/hostalparisbcn/3.jpg';
+	miProyecto.imagenesListado[3]= 'http://www.ecommercebarcelona360.com/imagenesListado/hostalparisbcn/4.jpg';
+	miProyecto.imagenesListado[4]= 'http://www.ecommercebarcelona360.com/imagenesListado/hostalparisbcn/5.jpg';
+	miProyecto.imagenesListado[5]= 'http://www.ecommercebarcelona360.com/imagenesListado/hostalparisbcn/6.jpg';
+	
+	vectorProyectos.push(miProyecto);
+	
+	
+	// Your Spanish Wine
+	miProyecto = new objetoProyecto(8,'Hostal Paris Bcn','http://www.hostalparisbcn.com');
+	miProyecto.imagenesListado[0]= 'http://www.ecommercebarcelona360.com/imagenesListado/yourspanishwine/1.jpg';
+	miProyecto.imagenesListado[1]= 'http://www.ecommercebarcelona360.com/imagenesListado/yourspanishwine/2.jpg';
+	miProyecto.imagenesListado[2]= 'http://www.ecommercebarcelona360.com/imagenesListado/yourspanishwine/3.jpg';
+	miProyecto.imagenesListado[3]= 'http://www.ecommercebarcelona360.com/imagenesListado/yourspanishwine/4.jpg';
+	miProyecto.imagenesListado[4]= 'http://www.ecommercebarcelona360.com/imagenesListado/yourspanishwine/5.jpg';
+	miProyecto.imagenesListado[5]= 'http://www.ecommercebarcelona360.com/imagenesListado/yourspanishwine/6.jpg';
+	
+	vectorProyectos.push(miProyecto);
+	*/
+	
+}
+	
+</script>
+</body>
+</html>

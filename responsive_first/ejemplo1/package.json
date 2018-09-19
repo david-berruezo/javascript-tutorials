@@ -1,0 +1,17 @@
+{
+  "name": "responsive_first",
+  "version": "1.0.0",
+  "description": "Aplicacion Responsive First",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Berruezo",
+  "license": "ISC",
+  "dependencies": {
+    "jade": "^1.11.0",
+    "jade-watch-folder": "^0.1.2",
+    "pug": "^2.0.3",
+    "pug-cli": "^1.0.0-alpha6"
+  }
+}

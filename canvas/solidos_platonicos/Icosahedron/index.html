@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Icosahedron</title>
+</head>
+<body>
+<canvas id="canvas" style="width:500; height:500" width="400" height="400"></canvas>
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var alpha=0, beta=0;
+    var pts = [];
+    var faces = [];
+
+    function map2d(p)
+    {
+        // Maps a 3d (x, y, z) point to screen coordinates (xs, ys, zs)
+        // The third coordinate zs is the "depth" and is used for sorting
+        // faces back-to-front (painter's algorithm).
+        var ca = Math.cos(alpha), sa = Math.sin(alpha);
+        var cb = Math.cos(beta), sb = Math.sin(beta);
+        var xx = (p.x*ca+p.y*sa)*cb + p.z*sb;
+        var yy = p.y*ca-p.x*sa;
+        var zz = p.z*cb - (p.x*ca+p.y*sa)*sb;
+        return {xs:4*xx/(5+zz),
+            ys:4*yy/(5+zz),
+            zs:zz};
+    }
+
+    function dist2(a, b)
+    {
+        // Squared distance between two 3d points
+        var dx = a.x - b.x;
+        var dy = a.y - b.y;
+        var dz = a.z - b.z;
+        return dx*dx + dy*dy + dz*dz;
+    }
+
+    function calcIcosahedron()
+    {
+        // Builds a regular icosahedron (20 triangular faces)
+        // An object is defined by a list of 3d points and a list
+        // of faces where each face is a list of indexes in the
+        // point array.
+        var phi = (1 + Math.sqrt(5)) / 2;
+        for (var sa=-1; sa<=1; sa+=2)
+        {
+            for (var sb=-1; sb<=1; sb+=2)
+            {
+                pts.push({x:0, y:sa, z:sb*phi});
+                pts.push({x:sa, y:sb*phi, z:0});
+                pts.push({x:sb*phi, y:0, z:sa});
+            }
+        }
+        for (var i=0; i<pts.length; i++)
+        {
+            for (var j=i+1; j<pts.length; j++)
+            {
+                if (Math.abs(dist2(pts[i], pts[j]) - 4) < 1E-5)
+                {
+                    for (var k=j+1; k<pts.length; k++)
+                    {
+                        if (Math.abs(dist2(pts[i], pts[k]) - 4) < 1E-5 &&
+                            Math.abs(dist2(pts[j], pts[k]) - 4) < 1E-5)
+                        {
+                            faces.push([i, j, k]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function repaint()
+    {
+        // draws next frame of the animation in the canvas
+        var w = canvas.offsetWidth;
+        var h = canvas.offsetHeight;
+        canvas.width = w;
+        canvas.height = h;
+        ctx.strokeStyle = "rgba(0,0,0,0.75)";
+        var sf = w/4;
+        var xfaces = [];
+        // Compute the drawing faces. Each original face will generate 6 vertices
+        // needed for outer and inner (transparent) triangle.
+        for (var i=0; i<faces.length; i++)
+        {
+            var f = faces[i];
+            var p0 = pts[f[0]];
+            var p1 = pts[f[1]];
+            var p2 = pts[f[2]];
+            var m = {x: (p0.x + p1.x + p2.x)/3,
+                y: (p0.y + p1.y + p2.y)/3,
+                z: (p0.z + p1.z + p2.z)/3};
+            var m0 = {x: (p0.x*3 + m.x)/4,
+                y: (p0.y*3 + m.y)/4,
+                z: (p0.z*3 + m.z)/4};
+            var m1 = {x: (p1.x*3 + m.x)/4,
+                y: (p1.y*3 + m.y)/4,
+                z: (p1.z*3 + m.z)/4};
+            var m2 = {x: (p2.x*3 + m.x)/4,
+                y: (p2.y*3 + m.y)/4,
+                z: (p2.z*3 + m.z)/4};
+            var xp0 = map2d(p0), xp1 = map2d(p1), xp2 = map2d(p2);
+            xfaces.push([-(xp0.zs+xp1.zs+xp2.zs),
+                xp0, xp1, xp2,
+                map2d(m0), map2d(m1), map2d(m2),
+                i]);
+        }
+        xfaces.sort();
+        // Draw all faces in back-to-front order so near ones will
+        // hide far ones (painter's algorithm).
+        for (var i=0; i<xfaces.length; i++)
+        {
+            var p0 = xfaces[i][1];
+            var p1 = xfaces[i][2];
+            var p2 = xfaces[i][3];
+            var m0 = xfaces[i][4];
+            var m1 = xfaces[i][5];
+            var m2 = xfaces[i][6];
+            var c = xfaces[i][7];
+            var c0 = (c & 1)*127 + 127;
+            var c1 = (c & 2)*63 + 127;
+            var c2 = (c & 4)*31 + 127;
+
+            ctx.fillStyle = "rgba("+c0+","+c1+","+c2+",0.75)";
+            ctx.beginPath();
+            ctx.moveTo(w/2+p0.xs*sf, h/2+p0.ys*sf);
+            ctx.lineTo(w/2+p1.xs*sf, h/2+p1.ys*sf);
+            ctx.lineTo(w/2+p2.xs*sf, h/2+p2.ys*sf);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = "#FFFFFF";
+            ctx.beginPath();
+            ctx.moveTo(w/2+p0.xs*sf, h/2+p0.ys*sf);
+            ctx.lineTo(w/2+p1.xs*sf, h/2+p1.ys*sf);
+            ctx.lineTo(w/2+p2.xs*sf, h/2+p2.ys*sf);
+            ctx.lineTo(w/2+p0.xs*sf, h/2+p0.ys*sf);
+            ctx.moveTo(w/2+m0.xs*sf, h/2+m0.ys*sf);
+            ctx.lineTo(w/2+m2.xs*sf, h/2+m2.ys*sf);
+            ctx.lineTo(w/2+m1.xs*sf, h/2+m1.ys*sf);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        }
+    }
+
+    calcIcosahedron();
+    repaint();
+
+    var last = (new Date()).getTime();
+
+    setInterval(function()
+    {
+        // Compute rotation angle depending on current clock
+        // to make animation speed independent on rendering
+        // speed of the browser.
+        var now = (new Date()).getTime();
+        alpha += (now - last) / 1000;
+        beta += (now - last) / 3100;
+        last = now;
+        repaint();
+    }, 20);
+</script>
+</body>
+</html>

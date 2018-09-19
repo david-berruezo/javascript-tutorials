@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TimingCircumferencia</title>
+    <script src="Librerias/utils/utils.js"></script>
+</head>
+<body>
+<canvas id="canvas" width=300 height=300></canvas>
+<script>
+    // var
+    var stop = false, frameCount = 0,fps, fpsInterval, startTime, now, then, elapsed,
+    x = 0,y = 0,angle = 0,vuelta = 0,contadorGrados = 0,grados,context = canvas.getContext('2d'),
+    dx,dy,margenX = 100,margenY = 100,radio = 200,vectorObjetos = new Array(),ncuadros=36,mouse = utils.captureMouse(document.getElementById("canvas"));
+    // Configuración
+    configuration();
+    // Call to start anim by time
+    startAnimating(100);
+
+    function startAnimating(fps) {
+        fpsInterval = 1000 / fps;
+        then = Date.now();
+        startTime = then;
+        console.log(startTime);
+        animate();
+    }
+
+    // Configuration
+    function configuration(){
+        var tempGrados    = 0;
+        canvas.height = window.innerHeight;
+        canvas.width  = window.innerWidth;
+        margenX  = radio / 2;
+        margenY  = radio / 2;
+        grados = 360 / ncuadros;
+        for (var i=0;i < ncuadros;i++){
+            tempGrados = grados * i;
+            var adjRatio = margenX + radio * Math.cos(tempGrados*(Math.PI/180)); // CAH
+            var oppRatio = margenY + radio * Math.sin(tempGrados*(Math.PI/180)); // SOH
+            var objeto1 = new cuadradoGrande(adjRatio,oppRatio,50,50,tempGrados,0);
+            //console.log("adjRatio: "+adjRatio+" oppRatio: "+oppRatio);
+            vectorObjetos.push(objeto1);
+        }// end for
+    }
+
+    function animate() {
+        // stop
+        if (stop) {
+            return;
+        }
+        // request another frame
+        requestAnimationFrame(animate);
+        // calc elapsed time since last loop
+        now     = Date.now();
+        elapsed = now - then;
+        // if enough time has elapsed, draw the next frame
+        if (elapsed > fpsInterval) {
+            // Get ready for next frame by setting then=now, but...
+            // Also, adjust for fpsInterval not being multiple of 16.67
+            then = now - (elapsed % fpsInterval);
+            // draw stuff here
+            // TESTING...Report #seconds since start and achieved fps.
+            var sinceStart = now - startTime;
+            var currentFps = Math.round(1000 / (sinceStart / ++frameCount) * 100) / 100;
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            moverCircumferencia();
+
+            /*
+            function moverCircumferencia(){
+                for (var i = 0; i < 36; i++ ){
+                    grados   = (360 / 36) * i;
+                    grados = grados + contadorGrados;
+                    if (grados > 360){
+                        grados = grados - 360;
+                    }
+                    adjRatio = margenX + radio * Math.cos(grados*(Math.PI/180)); // CAH
+                    oppRatio = margenY - radio * Math.sin(grados*(Math.PI/180)); // SOH
+                    dx = margenX - adjRatio;
+                    dy = margenY - oppRatio;
+                    var angle = Math.atan2(dy,dx) * 180 / Math.PI;
+                    Math.sqrt(dx * dx , dy * dy);
+                    //console.log('angle: '+angle+' dx: '+dx+' dy: '+dy);
+                    // canvas
+                    context.save();
+                    context.translate(adjRatio,oppRatio);
+                    context.rotate(-grados * Math.PI/180);
+                    context.fillStyle='0x000000';
+                    context.fillRect(-20/2, -20/2, 20, 20);
+                    context.restore();
+                }
+                contadorGrados++;
+            }
+            */
+
+            function moverCircumferencia(){
+                for (var i=0;i<vectorObjetos.length;i++){
+                    //x, y, width, height,angle,radius,scaleX,scaleY,alpha,skewX,zpos
+                    grados   = vectorObjetos[i].angle;
+                    /*
+                    grados = grados + contadorGrados;
+                    if (grados > 360){
+                        grados = grados - 360;
+                    }
+                    */
+                    adjRatio = vectorObjetos[i].x; // CAH
+                    oppRatio = vectorObjetos[i].y; // SOH
+                    context.save();
+                    context.translate(adjRatio,oppRatio);
+                    context.rotate(grados * Math.PI/180);
+                    context.fillStyle='0x000000';
+                    context.fillRect(-20/2, -20/2, 20, 20);
+                    context.restore();
+                    canvas.addEventListener('click', function () {
+                        console.log("pinchar");
+                        for (var i=0;i<vectorObjetos.length;i++){
+                            if (utils.containsPoint(vectorObjetos[i].getBounds(), mouse.x, mouse.y)) {
+                                //console.log("in ball: mousedown");
+                            } else {
+                                //console.log("canvas: mousedown");
+                            }
+                        }
+                    });
+                }
+                //contadorGrados++;
+            }
+        }
+    }
+</script>
+</body>
+</html>

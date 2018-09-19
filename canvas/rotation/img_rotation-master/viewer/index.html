@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Image Rotation Demo</title>
+		<script type="text/javascript" src="./rotate.js"></script>
+	</head>
+	<body>
+		<h1>Demo</h1>
+		<div id="img_ab"></div>
+		<div id="img_homhom"></div>
+		
+		<script type="text/javascript">
+			new ImageRotation(
+				document.getElementById('img_ab'),
+				'img/angelbeats[01-20].jpg'
+				).init();
+			new ImageRotation(
+				document.getElementById('img_homhom'),
+				'img/homhom[01-10].jpg'
+				).init();
+		</script>
+		<p>(Available on Google Chrome, Safari and Firefox)</p>
+		<h2>Rotating objects and taking photographs automatically</h2>
+		<p>
+			<img src="../doc/photo_booth.jpg"/>
+		</p>
+		<h2>Source code</h2>
+		<p>
+			<a href="https://github.com/maripo/img_rotation">
+				https://github.com/maripo/img_rotation
+			</a>
+		</p>
+	</body>
+</html>

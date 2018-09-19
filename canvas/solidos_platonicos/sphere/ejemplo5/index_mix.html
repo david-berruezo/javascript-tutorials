@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Esfera</title>
+    <script>
+        var canvas = "",
+            context = "",
+            //mouse = utils.captureMouse(canvas),
+            points = [],
+            fl = 250,
+            vpX = canvas.width / 2,
+            vpY = canvas.height / 2,
+            angleX, angleY,angleZ,contadorAngulos,
+            contador_cuadros = 0,
+            sphere   = "",
+            //var rotation = new Point3d();
+            distance = 1000,
+            lastX    = -1,
+            lastY    = -1;
+
+
+        function Point3D() {
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+        }
+
+        // Object
+        function Point3d (x, y, z) {
+            this.x = (x === undefined) ? 0 : x;
+            this.y = (y === undefined) ? 0 : y;
+            this.z = (z === undefined) ? 0 : z;
+            this.fl = 250;
+            this.vpX = 0;
+            this.vpY = 0;
+            this.cX = 0;
+            this.cY = 0;
+            this.cZ = 0;
+        }
+
+        Point3d.prototype.setVanishingPoint = function (vpX, vpY) {
+            this.vpX = vpX;
+            this.vpY = vpY;
+        };
+
+        Point3d.prototype.setCenter = function (cX, cY, cZ) {
+            this.cX = cX;
+            this.cY = cY;
+            this.cZ = cZ;
+        };
+
+        Point3d.prototype.rotateX = function (angleX) {
+            y1 = this.y * Math.cos(angleX) - this.z * Math.sin(angleX),
+                z1 = this.z * Math.cos(angleX) + this.y * Math.sin(angleX);
+            this.y = y1;
+            this.z = z1;
+        };
+
+        Point3d.prototype.rotateY = function (angleY) {
+            x1 = this.x * Math.cos(angleY) - this.z * Math.sin(angleY),
+                z1 = this.z * Math.cos(angleY) + this.x * Math.sin(angleY);
+            this.x = x1;
+            this.z = z1;
+        };
+
+        Point3d.prototype.rotateZ = function (angleZ) {
+            x1 = this.x * Math.cos(angleZ) - this.y * Math.sin(angleZ),
+                y1 = this.y * Math.cos(angleZ) + this.x * Math.sin(angleZ);
+            this.x = x1;
+            this.y = y1;
+        };
+
+        Point3d.prototype.getScreenX = function () {
+            var scale = this.fl / (this.fl + this.z + this.cZ);
+            return this.vpX + (this.cX + this.x) * scale;
+        };
+
+        Point3d.prototype.getScreenY = function () {
+            var scale = this.fl / (this.fl + this.z + this.cZ);
+            return this.vpY + (this.cY + this.y) * scale;
+        };
+
+        function Sphere3D(radius) {
+            this.vertices = new Array();
+            this.radius = (typeof(radius) == "undefined" || typeof(radius) != "number") ? 20.0 : radius;
+            this.rings = 16;
+            this.slices = 32;
+            this.numberOfVertices = 0;
+            var M_PI_2 = Math.PI / 2;
+            var dTheta = (Math.PI * 2) / this.slices;
+            var dPhi = Math.PI / this.rings;
+            var contador = 0;
+            // Iterate over latitudes (rings)
+            for (var lat = 0; lat < this.rings + 1; ++lat) {
+                var phi = M_PI_2 - lat * dPhi;
+                console.log("phi "+phi);
+                var cosPhi = Math.cos(phi);
+                var sinPhi = Math.sin(phi);
+                // Iterate over longitudes (slices)
+                //if (phi >= 0){
+                for (var lon = 0; lon < this.slices + 1; ++lon) {
+                    var theta = lon * dTheta;
+                    var cosTheta = Math.cos(theta);
+                    var sinTheta = Math.sin(theta);
+                    p = this.vertices[this.numberOfVertices] = new Point3D();
+                    p.x = this.radius * cosTheta * cosPhi;
+                    p.y = this.radius * sinPhi;
+                    p.z = this.radius * sinTheta * cosPhi;
+                    console.log("---------- valores ----------")
+                    console.log("p.x: "+p.x);
+                    console.log("p.y: "+p.y);
+                    console.log("p.z: "+p.z);
+                    console.log("---------- fin valores ----------")
+                    var pbueno = new Point3d(p.x, p.y, p.z);
+                    points[contador] = pbueno;
+                    this.numberOfVertices++;
+                    contador++
+                }
+                //}
+            }
+            console.log("El numero de vertices es: "+this.numberOfVertices);
+            /*
+            points.forEach(function (point) {
+                point.setVanishingPoint(vpX, vpY);
+            });
+            */
+        }
+
+        function move (point) {
+            point.rotateX(angleX);
+            point.rotateY(angleY);
+            point.rotateZ(angleZ);
+        }
+
+        function crearPuntos(point){
+            context.beginPath();
+            context.arc(point.getScreenX(),point.getScreenY(),3,0,2*Math.PI);
+            context.fill();
+            context.stroke();
+        }
+
+        window.onload = function () {
+            canvas = document.getElementById('canvas');
+            context = canvas.getContext('2d');
+            sphere = new Sphere3D();
+            (function drawFrame () {
+                window.requestAnimationFrame(drawFrame, canvas);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                /*
+                var valor = Math.PI;
+                if (contadorAngulos < valor){
+                    angleX = 0;
+                    angleZ = 0;
+                    angleY = 0.01;
+                    contadorAngulos = contadorAngulos + angleY;
+                }else{
+                    angleX = 0;
+                    angleY = 0;
+                    angleZ = 0;
+                }
+                */
+                points.forEach(move);
+                points.forEach(crearPuntos);
+                console.log("punto 0 x: "+points[0].getScreenX()+" punto 0 y: "+points[0].getScreenY());
+            }());
+        }
+
+    </script>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500">
+    Your browser does not support HTML5 canvas.
+</canvas>
+</body>
+</html>

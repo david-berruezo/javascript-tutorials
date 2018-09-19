@@ -1,0 +1,7 @@
+CONFIGURACION APLICACION
+-------------------------------------------
+1.- pug --watch pug --out html
+2.- sass --watch estilos.scss:./../css/estilos.cs
+3.- npm install jade-watch-folder -g
+4.- jade-watch-folder -P ./jade ./html_jade
+5.- PHPSTORM para ver el codigo bien Ctrl+Alt+L

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plantilla web</title>
+    <link href="./stylesheets/style.css" type="text/css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="./js/lib/TweenMax_min.js"></script>
+    <script src="./js/objects/Menu.js"></script>
+</head>
+<body>
+<div id="content_menu">
+    
+</div>
+<div id="barra"></div>
+<img id="logo" src="./../ejemplo1/assets/img/logo/davidberruezo@x1.png">
+<div id="barra_peke_uno"></div>
+<div id="barra_peke_dos"></div>
+<div id="barra_blanca"></div>
+<script>
+    // started
+    var menu_ojbect   = new Menu("menu_lateral");
+    $(document).ready(function(){
+        console.log("jQuery started");
+    });
+    window.onload=function(){
+        console.log("Window started");
+    }
+</script>
+</body>
+</html>

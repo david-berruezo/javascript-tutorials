@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timing</title>
+</head>
+<body>
+<h3>Throttling requestAnimationFrame to a FPS</h3>
+<p>This test:  Results should be approximately 5 fps
+<p id="results">Results:</p>
+<canvas id="canvas" width=300 height=300></canvas>
+<script>
+    var stop = false;
+    var frameCount = 0;
+    var results = document.getElementById("results");
+    var fps, fpsInterval, startTime, now, then, elapsed;
+    var x = 0;
+    var y = 0;
+    var angle = 0;
+    var vuelta = 0;
+    var contadorGrados = 0;
+    var context = canvas.getContext('2d');
+    canvas.height = window.innerHeight;
+    canvas.width  = window.innerWidth;
+
+    startAnimating(10);
+
+    function startAnimating(fps) {
+        fpsInterval = 1000 / fps;
+        then = Date.now();
+        startTime = then;
+        console.log(startTime);
+        animate();
+    }
+
+
+    function animate() {
+        // stop
+        if (stop) {
+            return;
+        }
+        // request another frame
+        requestAnimationFrame(animate);
+        // calc elapsed time since last loop
+        now     = Date.now();
+        elapsed = now - then;
+        // if enough time has elapsed, draw the next frame
+        if (elapsed > fpsInterval) {
+            // Get ready for next frame by setting then=now, but...
+            // Also, adjust for fpsInterval not being multiple of 16.67
+            then = now - (elapsed % fpsInterval);
+            // draw stuff here
+            // TESTING...Report #seconds since start and achieved fps.
+            var sinceStart = now - startTime;
+            var currentFps = Math.round(1000 / (sinceStart / ++frameCount) * 100) / 100;
+            results.innerHTML=("Elapsed time= " + Math.round(sinceStart / 1000 * 100) / 100 + " secs @ " + currentFps + " fps.");
+
+            function rotatePoint(x,y,angle) {
+                var newX = x * Math.cos(angle) - y * Math.sin(angle);
+                var newY = x * Math.sin(angle) + y * Math.cos(angle);
+                return [newX, newY];
+            };
+            draw();
+            function draw() {
+                //angle += 0.1;
+                context.beginPath();
+                context.lineWidth = 1;
+                context.moveTo(canvas.width * 0.5, canvas.height * 0.5)
+                var p = rotatePoint(100,100,angle);
+                context.lineTo(p[0] + canvas.width * 0.5, p[1] + canvas.height * 0.5);
+                context.strokeStyle = "#ff0000";
+                context.stroke();
+                /*
+                if (contadorGrados + 1 > 62){
+                    contadorGrados = 1;
+                    vuelta = 1;
+
+                }else{
+                    contadorGrados = contadorGrados + 1;
+                }
+                */
+                if (angle >= Math.PI*2){
+                    vuelta = 1;
+                }
+
+                console.log("contadorGrados: "+contadorGrados)
+                if (vuelta == 0){
+                    angle += 0.05;
+                }else{
+                    angle = 0;
+                }
+                //requestAnimationFrame(draw);
+            };
+
+
+        }
+    }
+</script>
+</body>
+</html>

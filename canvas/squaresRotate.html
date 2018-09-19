@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rotar cuadrado</title>
+    <style>
+    body {
+        background: #111;
+    }
+    canvas {
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    </style>
+</head>
+<body>
+<script>
+var c = document.createElement( 'canvas' ),
+ctx = c.getContext( '2d' ),
+cw = c.width = 300,
+ch = c.height = 300,
+tick = 0,
+rects = [];
+
+rects.push( new Rect({
+    x: cw / 2,
+    y: ch / 2,
+    w: 100,
+    h: 100,
+    pulse: 0,
+    rotation: 0,
+    alt: 1,
+    color: {
+        h: 0,
+        s: 90,
+        l: 60,
+        a: 1
+    }
+}));
+
+rects.push( new Rect({
+    x: cw / 2,
+    y: ch / 2,
+    w: 100,
+    h: 100,
+    pulse: Math.sin( 1 * 0.075 ),
+    rotation: Math.PI / 4,
+    alt: 0,
+    color: {
+        h: 180,
+        s: 90,
+        l: 60,
+        a: 1
+    }
+}));
+
+function Rect( opt ) {
+    this.x = opt.x;
+    this.y = opt.y;
+    this.w = opt.w;
+    this.h = opt.h;
+    this.color = opt.color;
+    this.bpulse = opt.pulse;
+    this.pulse = this.bpulse;
+    this.scale = 1;
+    this.brotation = opt.rotation;
+    this.rotation = this.brotation;
+    this.alt = opt.alt;
+}
+
+Rect.prototype.update = function() {
+    this.pulse = 0.5 + Math.sin( tick * 0.075 + this.bpulse ) * 0.5;
+    this.color.h += 1;
+    var rot = this.brotation + ( ( tick % 360 ) / 360 ) * ( Math.PI * 4 );
+    if( this.alt ) {
+        this.scale = 2 - this.pulse * 2;
+        this.rotation = rot;
+    } else {
+        this.scale = this.pulse * 2;
+        this.rotation = -rot;
+    }
+};
+
+Rect.prototype.render = function() {
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate( this.x, this.y );
+    ctx.scale( this.scale, this.scale );
+    ctx.rotate( this.rotation );
+    ctx.fillStyle = 'hsla(' + this.color.h + ', ' + this.color.s + '%, ' + this.color.l + '%, ' + this.color.a + ')';
+    ctx.fillRect( -this.w / 2, -this.h / 2, this.w, this.h );
+    ctx.restore();
+};
+
+function update() {
+    var length = rects.length;
+    for( i = 0; i < length; i++ ){
+        rects[ i ].update();
+    }
+}
+
+function render() {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = '#111';
+    ctx.fillRect( 0, 0, cw, ch );
+    ctx.globalCompositeOperation = 'lighter';
+    var length = rects.length;
+    for( i = 0; i < length; i++ ){
+        rects[ i ].render();
+    }
+}
+
+function loop() {
+    requestAnimationFrame( loop );
+    update();
+    render();
+    tick++;
+}
+
+document.body.appendChild( c );
+loop();
+</script>
+</body>
+</html>

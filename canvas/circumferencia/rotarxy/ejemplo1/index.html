@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Perspective 1</title>
+<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<canvas id="canvas" width="400" height="400"></canvas>
+<!-- <script src="utils/utils.js"></script> -->
+<script>
+// Cuadrado
+var cuadradoGrande = function(x, y, width, height,angle,radius,scaleX,scaleY,alpha,skewX,zpos) {
+    this.x 		= x;
+    this.y 		= y;
+    this.width  = width;
+    this.height = height;
+    this.angle  = angle;
+    this.radius = radius;
+    this.scaleX = scaleX;
+    this.scaleY = scaleY;
+    this.alpha  = alpha;
+    this.skewX  = skewX;
+    this.zpos   = zpos;
+
+} // End Object
+window.onload = function () {
+    var canvas = document.getElementById('canvas'),
+	context = canvas.getContext('2d'),
+	//ball = new Ball(),
+	vr = .05,
+	cos = Math.cos(vr),
+	sin = Math.sin(vr),
+	centerX = 350//canvas.width / 2,
+	centerY = 350//canvas.height / 2;
+	//ball.x = 400; //Math.random() * canvas.width;
+	//ball.y = 350; //Math.random() * canvas.height;
+	canvas.width = screen.width;
+	canvas.height = screen.height;
+    var grados = 0;
+	var radio  = 150;
+	var ncuadros = 10;
+	var margenX  = 500;
+	var margenY  = 500;
+	var vectorObjetos = new Array();
+    keepAnglesInObject();
+    // Save angles in a object
+	function keepAnglesInObject(){
+	    var tempGrados = 0;
+		radio = 150;
+		grados = 360 / ncuadros;
+	    for (var i=0;i < ncuadros;i++){
+		    tempGrados = grados * i;
+			var adjRatio = margenX + radio * Math.cos(tempGrados*(Math.PI/180)); // CAH
+			var oppRatio = margenY + radio * Math.sin(tempGrados*(Math.PI/180)); // SOH
+			var objeto1 = new cuadradoGrande(adjRatio,oppRatio,50,50,tempGrados,radio);
+			vectorObjetos.push(objeto1);
+	    }// end for
+    } // end function
+	
+	function circumferencia(){
+	    for (var i=0;i < ncuadros;i++){
+		    //console.log('Hola');
+		    context.save();
+		    vectorObjetos[i].angle = vectorObjetos[i].angle + 4;
+		    if (vectorObjetos[i].angle > 360){
+			    vectorObjetos[i].angle = vectorObjetos[i].angle - 360;
+		    }
+		    var adjRatio = margenX + radio * Math.cos(vectorObjetos[i].angle * (Math.PI/180)); // CAH
+			var oppRatio = margenY + radio * Math.sin(vectorObjetos[i].angle *(Math.PI/180)); // SOH
+		    var x1 = adjRatio - adjRatio;
+			var y1 = oppRatio + 150 - oppRatio; 
+		    //var x2 = x1 * cos - y1 * sin;
+			//var y2 = y1 * cos + x1 * sin;
+		    var x2 = x1 * Math.cos(vectorObjetos[i].angle * (Math.PI/180)) - y1 * Math.sin(vectorObjetos[i].angle *(Math.PI/180));
+			var y2 = y1 * Math.cos(vectorObjetos[i].angle * (Math.PI/180)) + x1 * Math.sin(vectorObjetos[i].angle *(Math.PI/180));
+
+			var y3 = margenY + radio * (Math.sin(vectorObjetos[i].angle * (Math.PI/180)) * Math.cos(1 * (Math.PI/180)) + Math.sin(1 * (Math.PI/180)) * Math.cos(vectorObjetos[i].angle * (Math.PI/180)));
+			var x3 = margenX + radio * (Math.cos(vectorObjetos[i].angle * (Math.PI/180)) * Math.cos(1 * (Math.PI/180)) - Math.sin(vectorObjetos[i].angle * (Math.PI/180)) * Math.sin(1 * (Math.PI/180)));
+
+			// y2 = 0;
+		    // ball.x = centerX + x2;
+			// ball.y = centerY + y2;
+		    // console.log(x2);
+		    //context.translate(200+x2,200+y2);
+            console.log("x3: "+x3+" y3: "+y3);
+            context.translate(x3,y3);
+		    context.rotate(vectorObjetos[i].angle * Math.PI/180);
+		    //color = rainbow(countOfColors, i);
+			color = '#000000';
+		    context.fillStyle=color;
+		    //context.fillRect(adjRatio+x2,oppRatio+y2, 20, 20);
+            context.fillRect(-20/2, -20/2, 20, 20);
+		    context.restore();
+	    }// End for
+	    //contadorTimer++;
+    }// End function
+		
+    (function drawFrame () {
+	    window.requestAnimationFrame(drawFrame, canvas);
+		context.clearRect(0, 0, canvas.width, canvas.height);
+	    var x1 = centerX;
+		var y1 = centerY;
+		var x2 = x1 * cos - y1 * sin;
+		var y2 = y1 * cos + x1 * sin;
+	    //ball.x = centerX + x2;
+		//ball.y = centerY + y2;
+	    //ball.draw(context);
+	    circumferencia();
+    }());
+}	
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+body{
+  margin:0px;
+  padding:0px;
+  background-color: rgb(220, 220, 220);
+}
+
+#barra{
+  position: absolute;
+  backgrond-color:rgb(220, 220, 220);
+  width: 42px;
+  height: 637px;
+  cursor:pointer;
+}
+
+#barra_blanca{
+  position: absolute;
+  background-color: rgb(229, 229, 229);
+  width: 1px;
+  height: 637px;
+  left: 43px;
+  top:0px;
+}
+
+#logo{
+  position:absolute;
+  top:10px;
+  left:10px;
+}
+
+#barra_peke_uno{
+  position: absolute;
+  left: 18px;
+  background-color: #999999;
+  width: 2px;
+  height: 30px;
+  top:307.5px;
+}
+
+
+#barra_peke_dos{
+  position: absolute;
+  left: 24px;
+  background-color: #999999;
+  width: 2px;
+  height: 30px;
+  top:307.5px;
+}

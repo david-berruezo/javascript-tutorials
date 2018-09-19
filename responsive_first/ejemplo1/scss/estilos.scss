@@ -1,0 +1,20 @@
+// Librerias y variables
+@import "./base/variables";
+@import "./librerias/normalize";
+@import "./librerias/ed-grid";
+@import "./librerias/ed-menu";
+
+// Base
+@import "./base/mixins";
+@import "./base/base";
+
+// Tema. Los componenetes básicos de todo proyecto
+@import "./tema/botones";
+@import "./tema/formularios";
+@import "./tema/imagenes";
+@import "./tema/menus";
+@import "./tema/header";
+@import "./tema/footer";
+@import "./tema/content";
+@import "./tema/icons";
+

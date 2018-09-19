@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Json example</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<table>
+    <tr>
+        <td>color</td>
+        <td>category</td>
+        <td>type</td>
+        <td>hex</td>
+    </tr>
+</table>
+<script>
+    $.getJSON( "fichero.json", function( data ) {
+        $.each( data.colors, function( key, val ) {
+            $("table").append( "<tr><td>"+val.color+"</td><td>"+val.category+"</td><td>"+val.type+"</td><td>"+val.code.hex+"</td></tr>" );
+        });
+    });
+</script>
+</body>
+</html>
