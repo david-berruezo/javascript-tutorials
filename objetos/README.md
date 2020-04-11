@@ -39,3 +39,18 @@ You can also initialize an object with key-value pairs when you create it:
 ```js
 var persona_literal_object = new Object( { nombre: "David",apellido:"Berruezo", ano:"23/11/1978" } );
 ```
+Access to object  properties by 3 way
+1.- First way
+```js
+persona_object.nombre;
+```
+2.- Second way
+```js
+persona_object["nombre"];
+```
+3.- Third way
+```js
+var variable = "nombre";
+persona[variable];
+```
+
