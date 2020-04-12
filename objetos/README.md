@@ -53,4 +53,15 @@ persona_object["nombre"];
 var variable = "nombre";
 persona[variable];
 ```
+Create a methods
+
+
+
+Show all object properties and object methods
+```js
+for(var propiedad in persona_object){
+    console.log("propiedad: "+propiedad);
+    console.log("valor: "+persona_object[propiedad]);
+}
+```
 
