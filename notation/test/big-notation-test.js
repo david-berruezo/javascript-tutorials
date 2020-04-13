@@ -31,6 +31,7 @@ function exampleLogarithmic(n) {
         console.log(i);
     }
 }
+
 // exampleLinear(3);
 // exampleQuadratic(3);
 // exampleCubic(3);
