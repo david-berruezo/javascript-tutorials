@@ -212,26 +212,121 @@ car.goes = "far";
 
 Object Constructor Catch
 
-Following are a few examples of passing a number, a string, and a boolean value to new
-Object(); the result is that you get objects created with a different constructor:
+Following are a few examples of passing a number, a string, and a boolean value to new Object(); 
+the result is that you get objects created with a different constructor:
 
 ```js
 // Warning: antipatterns ahead
 // an empty object
 var o = new Object();
 console.log(o.constructor === Object); // true
+
 // a number object
 var o = new Object(1);
 console.log(o.constructor === Number); // true
 console.log(o.toFixed(2)); // "1.00"
+
 // a string object
 var o = new Object("I am a string");
 console.log(o.constructor === String); // true
+
 // normal objects don't have a substring()
 // method but string objects do
 console.log(typeof o.substring); // "function"
+
 // a boolean object
 var o = new Object(true);
 console.log(o.constructor === Boolean); // true
 ```
+
+Custom constructor functions
+
+```js
+var Person = function (name) {
+    this.name = name;
+    this.say = function () {
+        return "I am " + this.name;
+    };
+};
+```
+
+It’s as if something like this happens behind the scenes:
+
+```js
+var Person = function (name) {
+    // create a new object
+    // using the object literal
+    // var this = {};
+    // add properties and methods
+    this.name = name;
+    
+    this.say = function () {
+        return "I am " + this.name;
+    };
+    // return this;
+};
+```
+
+The better option is to add the method to the prototype of Person:
+
+```js
+Person.prototype.say = function () {
+    return "I am " + this.name;
+};
+```
+
+Constructor’s Return Values
+
+```js
+var Objectmaker = function () {
+    // this `name` property will be ignored
+    // because the constructor
+    // decides to return another object instead
+    this.name = "This is it";
+    
+    // creating and returning a new object
+    var that = {};
+    that.name = "And that's that";
+    return that;
+};
+
+// test
+var o = new Objectmaker();
+console.log(o.name); // "And that's that"
+```
+
+Patterns for Enforcing new
+
+As mentioned already, constructors are still just functions but invoked with new. What
+happens if you forget new when you invoke a constructor? This is not going to cause
+syntax or runtime errors but might lead to logical errors and unexpected behavior.
+That’s because when you forget new, this inside the constructor will point to the global
+object. (In browsers this will point to window.)
+
+
+When your constructor has something like this.member and you invoke the constructor
+without new, you’re actually creating a new property of the global object called
+member and accessible through window.member or simply member. This behavior is highly
+undesirable, because you know you should always strive for keeping the global namespace
+clean.
+
+```js
+// constructor
+function Waffle() {
+    this.tastes = "yummy";
+}
+
+// a new object
+var good_morning = new Waffle();
+console.log(typeof good_morning); // "object"
+console.log(good_morning.tastes); // "yummy"
+
+// antipattern:
+// forgotten `new`
+var good_morning = Waffle();
+console.log(typeof good_morning); // "undefined"
+console.log(window.tastes); // "yummy"
+```
+
+
 
