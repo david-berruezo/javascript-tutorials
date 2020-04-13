@@ -199,3 +199,39 @@ dog.say = function () {
 dog.fleas = true;
 ```
 
+Here’s an example showing two equivalent ways to create two identical objects:
+
+```js
+// one way -- using a literal
+var car = {goes: "far"};
+// another way -- using a built-in constructor
+// warning: this is an antipattern
+var car = new Object();
+car.goes = "far";
+```
+
+Object Constructor Catch
+
+Following are a few examples of passing a number, a string, and a boolean value to new
+Object(); the result is that you get objects created with a different constructor:
+
+```js
+// Warning: antipatterns ahead
+// an empty object
+var o = new Object();
+console.log(o.constructor === Object); // true
+// a number object
+var o = new Object(1);
+console.log(o.constructor === Number); // true
+console.log(o.toFixed(2)); // "1.00"
+// a string object
+var o = new Object("I am a string");
+console.log(o.constructor === String); // true
+// normal objects don't have a substring()
+// method but string objects do
+console.log(typeof o.substring); // "function"
+// a boolean object
+var o = new Object(true);
+console.log(o.constructor === Boolean); // true
+```
+
