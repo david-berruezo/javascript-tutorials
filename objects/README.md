@@ -63,7 +63,7 @@ for(var propiedad in persona_object){
 }
 ```
 
-##Suggestion to create a clean object and comment it
+## Suggestion to create a clean object and comment it
 
 ```js
 
