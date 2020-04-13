@@ -55,13 +55,147 @@ persona[variable];
 ```
 Create a methods
 
-
-
 Show all object properties and object methods
 ```js
 for(var propiedad in persona_object){
     console.log("propiedad: "+propiedad);
     console.log("valor: "+persona_object[propiedad]);
 }
+```
+
+##Suggestion to create a clean object and comment it
+
+```js
+
+/**
+* My JavaScript application
+*
+* @module myapp
+*/
+
+var MYAPP = {};
+
+/**
+* A math utility
+* @namespace MYAPP
+* @class math_stuff
+*/
+
+MYAPP.math_stuff = {
+    
+   /**
+    * Sums two numbers
+    * @method sum
+    * @param {Number} a First number
+    * @param {Number} b The second number
+    * @return {Number} The sum of the two inputs
+    */
+    
+    sum: function (a, b) {
+        return a + b;
+    },
+    
+   /**
+    * Multiplies two numbers
+    *
+    * @method multi
+    * @param {Number} a First number
+    * @param {Number} b The second number
+    * @return {Number} The two inputs multiplied
+    */
+
+    multi: function (a, b) {
+        return a * b;
+    }
+};
+
+
+/**
+* Constructs Person objects
+* @class Person
+* @constructor
+* @namespace MYAPP
+* @param {String} first First name
+* @param {String} last Last name
+*/
+MYAPP.Person = function (first, last) {
+    
+   /**
+    * Name of the person
+    * @property first_name
+    * @type String
+    */
+    this.first_name = first;
+    
+   /**
+    * Last (family) name of the person
+    * @property last_name
+    * @type String
+    */
+    this.last_name = last;
+};
+
+/**
+* Returns the name of the person object
+*
+* @method getName
+* @return {String} The name of the person
+*/
+
+MYAPP.Person.prototype.getName = function () {
+    return this.first_name + ' ' + this.last_name;
+};
+```
+
+## Object Literal
+
+When you think about objects in JavaScript, simply think about hash tables of keyvalue
+pairs (similar to what are called “associative arrays” in other languages). The
+values can be primitives or other objects; in both cases they are called properties. The
+values can also be functions, in which case they are called methods.
+
+The custom objects you create in JavaScript (in other words, the user-defined native
+objects) are mutable at any time. Many of the properties of the built-in native objects
+are also mutable. You can start with a blank object and add functionality to it as you
+go. The object literal notation is ideal for this type of on-demand object creation.
+
+
+```js
+// start with an empty object
+var dog = {};
+// add one property
+dog.name = "Benji";
+
+// now add a method
+dog.getName = function () {
+    return dog.name;
+};
+```
+
+In the preceding example, you begin with a clean slate—a blank object. Then you add
+a property and a method to it. At any time in the life of the program you can:
+• Change the values of properties and methods, for example:
+
+```js
+dog.getName = function () {
+    // redefine the method to return
+    // a hardcoded value
+    return "Fido";
+};
+```
+
+• Remove properties/methods completely:
+
+```js
+delete dog.name;
+```
+
+• Add more properties and methods:
+
+```js
+dog.say = function () {
+    return "Woof!";
+};
+dog.fleas = true;
 ```
 
