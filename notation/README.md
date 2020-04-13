@@ -80,3 +80,7 @@ function bubbleSort(array){
     } 
 }
 ```
+
+If we execute bubbleSort for an array with size 10, the cost will be 100 (10^2). If we execute bubbleSort for 
+an array with size 100, the cost will be 10.000 (100^2). Note that the execution will take even longer every time
+we increase the input size.
