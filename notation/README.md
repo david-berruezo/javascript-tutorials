@@ -18,4 +18,65 @@ function increment(num){
     return ++num;
 }
 ```
-If we try to execute the increment(1) function, we will have an execution time equal to x. If we try to execute 
+If we try to execute the increment(1) function, we will have an execution time equal to x. If we try to execute the increment function again with a different parameter
+(let's say num is 2), the execution time will also be x. The parameter does not matter; the performance of the function increment will be the same. For this reason, we 
+can say the preceding function has a complexity of 0(1) (wich is constant). 
+
+## O(n)
+
+Now, let's use the sequential search algorithm as an example:
+
+```js
+function sequentialSearch(array,item){
+    for (var i=0;i<array.length;i++;){
+        if (item == array[i]){
+            return i;
+        }
+    }
+    return -1;
+}
+```
+
+Let's modify the algorithmti calculate the cost as follows:
+
+```js
+function sequentialSearch(array,item){
+    var cost = 0;
+    for (var i=0;i<array.length;i++;){
+        cost ++;
+        if (item == array[i]){
+            return i;
+        }
+    }
+    console.log('cost for sequentialSearch with input size '+array.length+' is '+cost);
+    return -1;
+}
+```
+
+Result will be 1,2,3,4...10...1000 depends of "cost" then notation will be O(n)
+
+## O(n^2)
+
+For the O(n^2) example, let's use the bubble sort algorithm
+
+```js
+function swap(array,index1,index2){
+    var aux = array[index1]; 
+    array[index1] = array[index2];
+    array[index2] = aux;
+}
+
+function bubbleSort(array){
+   var length = array.length;
+   var cost = 0;
+   for(var i=0;i<length;i++){
+       cost++
+       for (var j=0;j<length-1;j++){
+           cost++;
+           if (array[j] > array[j+1]){
+               swap(array,j,j+1);
+           }
+        }
+    } 
+}
+```
