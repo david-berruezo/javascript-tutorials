@@ -2,9 +2,7 @@
 
 ## Overview
 
-In this lesson, we'll introduce, define, and work with objects. 
-
-## Introduction 
+We'll introduce, define, and work with objects. 
 
 ## Introduction 
 
