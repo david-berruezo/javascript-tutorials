@@ -101,3 +101,4 @@ var num2 = new Number(1.45);
 console.log(typeof num1); // prints out number
 console.log(typeof num2); // prints out object
 ```
+
