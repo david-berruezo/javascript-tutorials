@@ -1,6 +1,7 @@
 # Primitive data types in JavaScript
 
 ## Overview
+
 There are exactly five primitive data types in JavaScript: string, number, boolean, null,
 and undefined. Only the string, number, and boolean data types have complementary
 constructor objects. The actual representation of strings, floating-point numbers, integers,

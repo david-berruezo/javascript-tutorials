@@ -43,6 +43,34 @@ let newLength = fruits.push('Orange')
 // ["Apple", "Banana", "Orange"]
 ```
 
+Remove from the end of an Array
+
+```js
+let last = fruits.pop() // remove Orange (from the end)
+// ["Apple", "Banana"]
+```
+
+Remove from the front of an Array
+
+```js
+let first = fruits.shift() // remove Apple from the front
+// ["Banana"]
+```
+
+Add to the front of an Array
+
+```js
+let newLength = fruits.unshift('Strawberry') // add to the front
+// ["Strawberry", "Banana"]
+```
 
 
+Add to the front of an Array
+```js
+for (let i= fruits.length; i>=0 ; i--){
+  fruits[i] = fruits[i-1]; 
+}
+fruits[0] = "start";
+
+```
 
