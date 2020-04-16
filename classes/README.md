@@ -211,6 +211,139 @@ Public field declarations
 
 With the JavaScript field declaration syntax, the above example can be written as:
 
+```js
+class Rectangle {
+  height = 0;
+  width;
+  constructor(height, width) {    
+    this.height = height;
+    this.width = width;
+  }
+}
+
+```
+
+Private field declarations
+
+Using private fields, the definition can be refined as below.
+
+```js
+class Rectangle {
+  #height = 0;
+  #width;
+  constructor(height, width) {    
+    this.#height = height;
+    this.#width = width;
+  }
+}
+```
+
+Sub classing with extends
+
+The extends keyword is used in class declarations or class expressions to create a class as a child of another class.
 
 
+```js
+class Animal { 
+  
+  constructor(name) {
+    this.name = name;
+  }
+  
+  speak() {
+    console.log(`${this.name} makes a noise.`);
+  }
+}
 
+class Dog extends Animal {
+  
+  constructor(name) {
+    super(name); // call the super class constructor and pass in the name parameter
+  }
+
+  speak() {
+    console.log(`${this.name} barks.`);
+  }
+}
+
+let d = new Dog('Mitzie');
+d.speak(); // Mitzie barks.
+```
+
+If there is a constructor present in the subclass, it needs to first call super() before using "this".
+One may also extend traditional function-based "classes":
+
+
+```js
+function Animal (name) {
+  this.name = name;  
+}
+
+Animal.prototype.speak = function () {
+  console.log(`${this.name} makes a noise.`);
+}
+
+class Dog extends Animal {
+  speak() {
+    console.log(`${this.name} barks.`);
+  }
+}
+
+let d = new Dog('Mitzie');
+d.speak(); // Mitzie barks.
+
+//NB: For similar methods, the child's method takes precedence over parent's method
+
+```
+
+Super class calls with super
+
+The super keyword is used to call corresponding methods of super class. This is one advantage over prototype-based inheritance.
+
+```js
+class Cat { 
+  constructor(name) {
+    this.name = name;
+  }
+  
+  speak() {
+    console.log(`${this.name} makes a noise.`);
+  }
+}
+
+class Lion extends Cat {
+  speak() {
+    super.speak();
+    console.log(`${this.name} roars.`);
+  }
+}
+
+let l = new Lion('Fuzzy');
+l.speak(); 
+// Fuzzy makes a noise.
+// Fuzzy roars.
+
+```
+
+Mix-ins
+Abstract subclasses or mix-ins are templates for classes. An ECMAScript class can only have a single superclass, so multiple inheritance from tooling classes, for example, is not possible. The functionality must be provided by the superclass.
+
+A function with a superclass as input and a subclass extending that superclass as output can be used to implement mix-ins in ECMAScript:
+
+```js
+let calculatorMixin = Base => class extends Base {
+  calc() { }
+};
+
+let randomizerMixin = Base => class extends Base {
+  randomize() { }
+};
+
+```
+
+A class that uses these mix-ins can then be written like this:
+
+```js
+class Foo { }
+class Bar extends calculatorMixin(randomizerMixin(Foo)) { }
+```

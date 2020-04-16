@@ -67,3 +67,26 @@ class Rectangle_two {
 const square = new Rectangle_two(10, 10);
 console.log(square.area); // 100
 
+
+
+class Cat { 
+    constructor(name) {
+      this.name = name;
+    }
+    
+    speak() {
+      console.log(`${this.name} makes a noise.`);
+    }
+  }
+  
+  class Lion extends Cat {
+    speak() {
+      super.speak();
+      console.log(`${this.name} roars.`);
+    }
+  }
+  
+  let l = new Lion('Fuzzy');
+  l.speak(); 
+  // Fuzzy makes a noise.
+  // Fuzzy roars.
