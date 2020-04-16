@@ -1,5 +1,7 @@
+# String a primitive data types in JavaScript
 
 ## Extracting a List from a String
+
 ## Problem
 
 You have a string with several sentences, one of which includes a list of items. The list
