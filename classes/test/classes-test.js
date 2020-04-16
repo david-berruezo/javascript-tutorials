@@ -39,3 +39,31 @@ class Expedition extends Vacation_two {
 
 const trip_two = new Expedition("Mt. Whitney", 3, ["sunglasses", "prayer flags", "camera"])
 trip_two.print()
+
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+}
+
+
+
+class Rectangle_two {
+    constructor(height, width) {
+      this.height = height;
+      this.width = width;
+    }
+    // Getter
+    get area() {
+      return this.calcArea();
+    }
+    // Method
+    calcArea() {
+      return this.height * this.width;
+    }
+  }
+  
+const square = new Rectangle_two(10, 10);
+console.log(square.area); // 100
+
