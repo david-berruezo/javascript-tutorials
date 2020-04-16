@@ -326,5 +326,16 @@ console.log(typeof good_morning); // "undefined"
 console.log(window.tastes); // "yummy"
 ```
 
+Using that
+
+```js
+function Waffle() {
+  var that = {};
+  that.tastes = "yummy";
+  return that;
+}
+```
+
+
 
 
