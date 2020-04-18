@@ -1,5 +1,64 @@
 # String a primitive data types in JavaScript
 
+## Finding a String in a String
+
+The indexOf() method returns the index of (the position of) the first occurrence of a specified text in a string:
+
+```js
+var str = "Please locate where 'locate' occurs!";
+var pos = str.indexOf("locate");
+```
+
+The lastIndexOf() method returns the index of the last occurrence of a specified text in a string:
+
+```js
+var str = "Please locate where 'locate' occurs!";
+var pos = str.lastIndexOf("locate");
+```
+
+## The slice() Method
+
+slice() extracts a part of a string and returns the extracted part in a new string.
+The method takes 2 parameters: the start position, and the end position (end not included).
+This example slices out a portion of a string from position 7 to position 12 (13-1):
+
+
+```js
+var str = "Apple, Banana, Kiwi";
+var res = str.slice(7, 13);
+```
+If a parameter is negative, the position is counted from the end of the string.
+This example slices out a portion of a string from position -12 to position -6:
+
+```js
+var str = "Apple, Banana, Kiwi";
+var res = str.slice(-12, -6);
+```
+
+## The substring() Method
+
+```js
+var str = "Apple, Banana, Kiwi";
+var res = str.substring(7, 13);
+```
+
+## Searching for a String in a String
+
+```js
+var str = "Please locate where 'locate' occurs!";
+var pos = str.search("locate");
+```
+
+## Extracting String Parts
+### There are 3 methods for extracting a part of a string:
+
+```js
+slice(start, end)
+substring(start, end)
+substr(start, length)
+```
+
+
 ## Extracting a List from a String
 
 ## Problem
