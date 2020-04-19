@@ -20,11 +20,12 @@ and booleans are literals:
 
 #### Overview
 
-String a primitive data types in JavaScript
+String a primitive data types in JavaScript, in this section you can see a several scripts to work with strings, for example, 
+look for variables, extract substrings, manipulate substrings etc
 
 ### 04.- Objects
 
 #### Overview
 
-We'll introduce, define, and work with objects. 
+We'll introduce, define, and work with objects. Literal objects, constructor objects , methods, properties, classes, private properties, public properties, inheritance etc.
 
