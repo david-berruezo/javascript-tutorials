@@ -1,4 +1,4 @@
-# Collection of JavaScript | EC6 | EC7 | Canvas
+# Collection of | JS | EC6 | EC7 | Canvas | Tutorials
 
 ### 01.- Notation
 
