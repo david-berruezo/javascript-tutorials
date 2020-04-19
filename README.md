@@ -39,3 +39,13 @@ Arrays cannot use strings as element indexes (as in an associative array) but mu
 #### Overview
 
 The Object class represents one of JavaScript's data types. It is used to store various keyed collections and more complex entities. Objects can be created using the Object() constructor or the object initializer / literal syntax.
+
+
+
+### 06.- Modules
+
+#### Overview
+
+Use of native JavaScript modules is dependent on the import and export statements, the browser compatibility of which is as follows (numbers in green boxes are probably the release version of respective platform which support the feature):
+
+
